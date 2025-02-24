@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corazones Flotantes</title>
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #text-container {
+            position: absolute;
+            top: 10vh;
+            width: 80%;
+            max-width: 600px;
+            height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div id="text-container">
+        <p>
+            Desde que te conocí, cada día se ha vuelto más especial.<br><br>
+            Me encanta hablar contigo, escuchar tu voz y perderme en tu sonrisa.<br><br>
+            No hay nada que disfrute más que compartir momentos a tu lado,<br><br>
+            porque contigo todo se siente más bonito, más real, más sincero.<br><br>
+            Quiero que sepas que haré todo por ti, que estaré aquí siempre,<br><br>
+            sin importar qué pase. No hay nada que desee más que verte feliz,<br><br>
+            verte cumplir tus sueños y, si la vida nos lo permite, poder ser parte de ellos.<br><br>
+            No sé qué nos depare el futuro, pero sé lo que quiero y lo quiero todo contigo.<br><br><br>
+            Para la niña más hermosa de este mundo: La Dra. Antonio González.
+        </p>
+    </div>
+    <script>
+        var stage, w, h;
+
+        function init() {
+            var canvas = document.getElementById("canvas");
+            stage = new createjs.Stage(canvas);
+            resizeCanvas();
+            window.addEventListener("resize", resizeCanvas);
+            createHearts();
+            createjs.Ticker.framerate = 60;
+            createjs.Ticker.addEventListener("tick", update);
+        }
+
+        function resizeCanvas() {
+            var canvas = document.getElementById("canvas");
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+
+        function createHearts() {
+            for (let i = 0; i < 250; i++) {
+                let heart = new createjs.Shape();
+                let color = "#FF1493";
+                drawHeart(heart.graphics, color);
+                heart.x = Math.random() * w;
+                heart.y = h + Math.random() * 100;
+                heart.scaleX = heart.scaleY = Math.random() * 0.8 + 0.2;
+                stage.addChild(heart);
+                animateHeart(heart);
+            }
+        }
+
+        function drawHeart(graphics, color) {
+            graphics.beginFill(color);
+            graphics.moveTo(0, -10);
+            graphics.bezierCurveTo(10, -30, 30, -30, 30, -10);
+            graphics.bezierCurveTo(30, 10, 10, 30, 0, 40);
+            graphics.bezierCurveTo(-10, 30, -30, 10, -30, -10);
+            graphics.bezierCurveTo(-30, -30, -10, -30, 0, -10);
+            graphics.closePath();
+        }
+
+        function animateHeart(heart) {
+            createjs.Tween.get(heart, { loop: true })
+                .to({ y: -50, alpha: 0 }, 5000 + Math.random() * 5000, createjs.Ease.linear)
+                .call(() => {
+                    heart.y = h + 50;
+                    heart.x = Math.random() * w;
+                    heart.alpha = 1;
+                });
+        }
+
+        function update() {
+            stage.update();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
